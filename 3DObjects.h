@@ -3,7 +3,7 @@
 using namespace sf;
 
 const int moveSpeed = 10, rotationSpeed = 10;
-const int width = 1080, height = 720, resolutionReduction = 4;
+const int width = 1080, height = 720; 
 
 
 class Vector3Df : public Vector3f {
@@ -29,15 +29,16 @@ public:
 
     Camera(Vector3Df pos, Vector3Df rt, float flwdh, float mvd);
 
-    void move(Vector2f mouse_pos);
+    bool move(bool mouse, Vector2f mouse_pos);
 };
 
 class object {
 public:
     Vector3Df color;
     Vector3Df Center;
-    virtual float isRayIntersects(Vector3Df camera, Vector3Df RayDirection) = 0;
+    virtual float isRayIntersects(Vector3Df &camera, Vector3Df &RayDirection) = 0;
     virtual float trayRay(Vector3Df camera, Vector3Df RayDirection, Vector3Df light, int lightPow) = 0;
+    virtual Vector3Df countNormal(Vector3Df pointOnObject) = 0;
 };
 
 class sphere : public object
@@ -46,8 +47,9 @@ public:
     float radius;
     sphere();
     sphere(Vector3Df pos, float r, Vector3Df color);
-    float isRayIntersects(Vector3Df camera, Vector3Df RayDirection);
+    float isRayIntersects(Vector3Df &camera, Vector3Df &RayDirection);
     float trayRay(Vector3Df camera, Vector3Df RayDirection, Vector3Df light, int lightPow);
+    Vector3Df countNormal(Vector3Df pointOnObject);
 };
 class plane : public object
 {
@@ -56,6 +58,7 @@ private:
 public:
     plane();
     plane(Vector3Df cen, Vector3Df nrm, Vector3Df color);
-    float isRayIntersects(Vector3Df camera, Vector3Df RayDirection);
+    float isRayIntersects(Vector3Df &camera, Vector3Df &RayDirection);
     float trayRay(Vector3Df camera, Vector3Df RayDirection, Vector3Df light, int lightPow);
+    Vector3Df countNormal(Vector3Df pointOnObject);
 };
